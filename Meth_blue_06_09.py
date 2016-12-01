@@ -82,7 +82,7 @@ def calculate_graph_data(*args):
     sub_forward_current = np.array(subtracted_forward_current_list)
     sub_reverse_current = np.array(subtracted_reverse_current_list)
     #
-    forward_current_mean = np.mean(forward_current, axis=0)jnjn
+    forward_current_mean = np.mean(forward_current, axis=0)
     forward_current_std = np.std(forward_current, axis=0)
     reverse_current_mean = np.mean(reverse_current, axis=0)
     reverse_current_std = np.std(reverse_current, axis=0)
