@@ -43,7 +43,7 @@ def get_looped_cv_data(filename):
                 forward_cycle.append(reading_forward)
                 reverse_cycle.append(reading_reverse)
 
-                print("New Cycle Started")
+
 
         second_cv_forward = forward_cycle_list[-1]
         second_cv_reverse = reverse_cycle_list[-1]
@@ -56,9 +56,12 @@ def get_looped_cv_data(filename):
 
 def plot_looped_data(directory):
     file_list = get_data_paths(directory)
+    print(len(file_list))
+    file_list.pop(0)
     voltage_list = list()
     current_list = list()
     for file in file_list:
+        print(file)
         for_voltage = list()
         rev_voltage = list()
         for_current = list()

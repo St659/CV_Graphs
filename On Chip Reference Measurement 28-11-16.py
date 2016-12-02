@@ -2,7 +2,7 @@ from Looped_CV_Data import plot_looped_data
 import matplotlib.pyplot as plt
 import numpy as np
 import os
-directory = 'E:\Google Drive\Celll Ref Measurements 28-11-16'
+directory = '/Users/st659/Google Drive/Celll Ref Measurements 28-11-16'
 directory2 = '/Users/st659/Google Drive/Cell 1 Reference Measurement'
 voltage_list, current_list =plot_looped_data(directory)
 
@@ -28,20 +28,29 @@ ax.set_title('Cyclic Voltammetry of On Chip Electrode Array of 100 $\mu$M Methyl
 fig2 = plt.figure()
 ax2 = fig2.add_subplot(111)
 ax3 = ax2.twinx()
-ax3.plot(time_points, max_voltage_list, color='g', label='Voltage')
-max_voltage_list.pop(2)
+
+max_voltage_list.pop(0)
 max_voltage_list.pop(-2)
-max_current_list.pop(2)
+max_current_list.pop(0)
 max_current_list.pop(-2)
 time= list()
 for num in time_points:
     time.append(num)
 
-time.pop(2)
+time.pop(0)
 time.pop(-2)
 ax2.plot(time, max_current_list, label='Current')
 
 ax3.plot(time, max_voltage_list, color='r', label='Voltage')
+
+
+average_voltage = np.full(( len(max_voltage_list),1),np.mean(max_voltage_list,axis=0))
+std_dev_1 = np.full((len(max_voltage_list),1), np.mean(max_voltage_list,axis=0) + np.std(max_voltage_list,axis=0))
+std_dev_2 = np.full((len(max_voltage_list),1), np.mean(max_voltage_list,axis=0) - np.std(max_voltage_list,axis=0))
+print(len(average_voltage))
+ax3.plot(time, average_voltage, color='g', linestyle='--')
+ax3.plot(time, std_dev_1, color='k', linestyle='--')
+ax3.plot(time, std_dev_2, color='k', linestyle='--')
 
 print(np.mean(max_voltage_list,axis=0))
 print(np.std(max_voltage_list,axis=0))

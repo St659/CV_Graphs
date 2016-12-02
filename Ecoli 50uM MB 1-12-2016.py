@@ -9,9 +9,10 @@ def smooth(y, box_pts):
     return y_smooth
 def mad(data, axis=None):
     return np.mean(np.abs(data - np.mean(data, axis)), axis)
-directory = 'E:\Google Drive\Ecoli 50uM MB 1-12-2016'
+directory = '/Users/st659/Google Drive/Ecoli 50uM MB 1-12-2016'
 directory2 = '/Users/st659/Google Drive/Cell 1 Reference Measurement'
 voltage_list, current_list =plot_looped_data(directory)
+
 
 max_current_list = list()
 max_voltage_list = list()
@@ -36,7 +37,7 @@ for voltage, time, mad_v in zip(max_voltage_list, time_points, mad_list):
         smooth_voltage.append(voltage)
         smooth_time.append(time)
 
-print(np.gradient(max_voltage_list,axis=0))
+
 plt.style.use(['seaborn-white','seaborn-poster'])
 fig = plt.figure()
 ax = fig.add_subplot(111)
