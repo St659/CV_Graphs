@@ -4,6 +4,18 @@ import codecs
 import numpy as np
 import matplotlib.pyplot as plt
 
+def get_maximum_current(voltage_list, current_list):
+    max_current_list = list()
+    max_voltage_list = list()
+    for current, voltage in zip(current_list, voltage_list):
+        max_current = max(current)
+        max_current_arg = np.argmax(current)
+        max_current_list.append(max_current)
+        max_voltage_list.append(voltage[max_current_arg])
+
+    time_points = np.linspace(0,len(max_current_list)*10, num=len(max_current_list))
+    return max_voltage_list, max_current_list, time_points
+
 def get_looped_cv_data(filename):
     with codecs.open(filename, 'r', encoding='utf-8', errors='ignore') as file:
         file_lines = file.readlines()
@@ -52,32 +64,49 @@ def get_looped_cv_data(filename):
 
         return second_cv_forward, second_cv_reverse
 
+def file_sort(file):
+
+        split_path = file.split('_')
+
+        second_split = split_path[-1].split('.')
+
+        loop = second_split[0]
+
+        return int(loop[4:])
+
+
 
 
 def plot_looped_data(directory):
     file_list = get_data_paths(directory)
     print(len(file_list))
-    file_list.pop(0)
+
     voltage_list = list()
     current_list = list()
-    for file in file_list:
-        print(file)
-        for_voltage = list()
-        rev_voltage = list()
-        for_current = list()
-        rev_current = list()
-        forward,reverse = get_looped_cv_data(file)
-        for reading_for, reading_rev in zip(forward,reverse):
-            for_voltage.append(reading_for[0])
-            rev_voltage.append(reading_rev[0])
-            for_current.append(reading_for[1])
-            rev_current.append(reading_rev[1])
-        forward_np = np.array(forward)
-        reverse_np = np.array(reverse)
-        voltage = np.concatenate((for_voltage, rev_voltage[::-1]), axis=0)
-        current = np.concatenate((for_current, rev_current[::-1]), axis=0)
-        voltage_list.append(voltage)
-        current_list.append(current)
+
+
+    try:
+        for file in sorted(file_list,key=file_sort):
+            print(file)
+            for_voltage = list()
+            rev_voltage = list()
+            for_current = list()
+            rev_current = list()
+            forward,reverse = get_looped_cv_data(file)
+            for reading_for, reading_rev in zip(forward,reverse):
+                for_voltage.append(reading_for[0])
+                rev_voltage.append(reading_rev[0])
+                for_current.append(reading_for[1])
+                rev_current.append(reading_rev[1])
+            forward_np = np.array(forward)
+            reverse_np = np.array(reverse)
+            voltage = np.concatenate((for_voltage, rev_voltage[::-1]), axis=0)
+            current = np.concatenate((for_current, rev_current[::-1]), axis=0)
+            voltage_list.append(voltage)
+            current_list.append(current)
+    except ValueError:
+        print('could not be read')
+
 
 
 

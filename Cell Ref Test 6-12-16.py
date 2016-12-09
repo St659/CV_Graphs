@@ -2,28 +2,24 @@ from Looped_CV_Data import plot_looped_data
 import matplotlib.pyplot as plt
 import numpy as np
 import os
-
-def get_maximum_current(voltage, current):
-    max_current_list = list()
-    max_voltage_list = list()
-    for current, voltage in zip(current_list, voltage_list):
-        max_current = max(current)
-        max_current_arg = np.argmax(current)
-        max_current_list.append(max_current)
-        max_voltage_list.append(voltage[max_current_arg])
-
-    time_points = np.linspace(0,len(max_current_list)*10, num=len(max_current_list))
-    return max_current_list, max_voltage_list, time_points
-
-directory = '/Users/st659/Google Drive/Celll Ref Measurements 28-11-16'
+directory = '/Users/st659/Google Drive/Cell Chamber Ref Test 02-12-16'
 directory2 = '/Users/st659/Google Drive/Cell 1 Reference Measurement'
+voltage_list, current_list =plot_looped_data(directory)
 
 
+max_current_list = list()
+max_voltage_list = list()
+for current, voltage in zip(current_list, voltage_list):
+    max_current = max(current)
+    max_current_arg = np.argmax(current)
+    max_current_list.append(max_current)
+    max_voltage_list.append(voltage[max_current_arg])
 
+time_points = np.linspace(0,len(max_current_list)*10, num=len(max_current_list))
 plt.style.use(['seaborn-white','seaborn-poster'])
 fig = plt.figure()
 ax = fig.add_subplot(111)
-for volt, curr in zip(voltage_list_28_11, current_list):
+for volt, curr in zip(voltage_list, current_list):
     ax.plot(volt,curr)
 ax.set_xlabel('Voltage (V)')
 ax.set_ylabel('Current (mA)')
@@ -33,16 +29,12 @@ fig2 = plt.figure()
 ax2 = fig2.add_subplot(111)
 ax3 = ax2.twinx()
 
-max_voltage_list.pop(0)
-max_voltage_list.pop(-2)
-max_current_list.pop(0)
-max_current_list.pop(-2)
+
 time= list()
 for num in time_points:
     time.append(num)
 
-time.pop(0)
-time.pop(-2)
+
 ax2.plot(time, max_current_list, label='Current')
 
 ax3.plot(time, max_voltage_list, color='r', label='Voltage')
