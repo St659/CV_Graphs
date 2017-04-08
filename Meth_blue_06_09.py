@@ -45,11 +45,16 @@ def calculate_graph_data(*args):
     subtracted_reverse_current_list = list()
     subtracted_forward_current_list = list()
     data_files= args[0]
-    print(data_files)
-    for data_file in data_files:
-        forward,reverse = get_cv_data(data_file)
+
+    if not isinstance(data_files, list):
+        forward,reverse = get_cv_data(data_files)
         forward_list.append(forward)
         reverse_list.append(reverse)
+    else:
+        for data_file in data_files:
+            forward,reverse = get_cv_data(data_file)
+            forward_list.append(forward)
+            reverse_list.append(reverse)
 
     voltage_forward = np.linspace(forward_list[0][0][0], forward_list[0][-1][0],500)
     voltage_reverse = np.linspace(reverse_list[0][0][0], reverse_list[0][-1][0],500)
@@ -101,7 +106,7 @@ def calculate_graph_data(*args):
 
     file_path_split= data_files[0].split('/')
     legend_split = file_path_split[-1].split('_')
-    legend = legend_split[0] + " " + legend_split[1]
+    legend = legend_split
     voltage_max_arg = np.argmax(forward_current_mean)
     voltage_max = np.argmax(voltage_max_arg)
 
@@ -112,11 +117,12 @@ def get_data_paths(directory):
     filenames = os.listdir(directory)
     print(filenames)
     paths = list()
-
     for name in filenames:
-        new_name = os.path.join(directory, name)
-        paths.append(new_name)
+        if '.mpt' in name:
+            new_name = os.path.join(directory, name)
+            paths.append(new_name)
 
+    print(paths)
     return paths
 
 
